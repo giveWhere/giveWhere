@@ -33,3 +33,29 @@ async function searchRecyclingInfo() {
 
 // Attach search function to button click
 document.querySelector("button").addEventListener("click", searchRecyclingInfo);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GiveWhere - Find Where to Donate</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>GiveWhere</h1>
+        <p>Find the best place to donate or recycle your items.</p>
+    </header>
+
+    <section class="search">
+        <input type="text" id="searchInput" placeholder="Enter an item (e.g., clothes, furniture, electronics)">
+        <button onclick="searchRecyclingInfo()">Search</button>
+    </section>
+
+    <section id="results"></section>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
