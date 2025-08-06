@@ -118,10 +118,66 @@
       Launch the App
     </a>
   </section>
+<section>
+  <section>
+  <h2>Contact Us</h2>
+  <p>Have a suggestion or want to list a center? Let us know.</p>
 
+  <form id="contactForm">
+    <input type="text" name="name" placeholder="Your name" required>
+    <input type="email" name="email" placeholder="Your email" required>
+    <textarea name="message" placeholder="Your message" rows="5" required></textarea>
+    <button type="submit">Send Message</button>
+  </form>
+
+  <p id="contactResponse" style="display:none; color:green; font-weight:bold; margin-top:1rem;">
+    Thank you! We'll be in touch soon.
+  </p>
+</section>
+
+</section>
+
+<section>
+  <h2>Join Our Email List</h2>
+  <p>Get updates when new cities, features, or resources are added to GiveWhere.</p>
+
+  <form action="https://formsubmit.co/givewhereinfo@gmail.com" method="POST">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_subject" value="New Email Sign-Up">
+    <input type="email" name="email" placeholder="Your email address" required style="width:100%;padding:10px;margin:10px 0;border:1px solid #ccc;border-radius:8px;">
+    <button type="submit" style="padding:10px 20px;background:#000;color:#fff;border:none;border-radius:8px;cursor:pointer;">Subscribe</button>
+  </form>
+</section>
   <footer>
     &copy; 2025 GiveWhere • Built for good • <a href="mailto:hello@givewhere.org">Contact Us</a>
   </footer>
+<script>
+  document.getElementById("contactForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const data = {
+      name: form.name.value,
+      email: form.email.value,
+      message: form.message.value,
+      source: "Contact Form"
+    };
+
+    fetch("YOUR_GOOGLE_SCRIPT_WEB_APP_URL", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => res.json())
+      .then(response => {
+        document.getElementById("contactResponse").style.display = "block";
+        form.reset();
+      })
+      .catch(err => alert("Something went wrong. Please try again later."));
+  });
+</script>
 
 </body>
 </html>
