@@ -1,183 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="GiveWhere helps you easily find the best way to donate or recycle your stuff. Clear clutter. Save the planet."/>
-  <title>GiveWhere – Donating & Recycling Made Simple</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Helvetica Neue', sans-serif;
-      background-color: #fff;
-      color: #333;
-    }
-
-    header {
-      text-align: center;
-      padding: 3rem 1rem 2rem;
-    }
-
-    .logo {
-      max-width: 180px;
-      margin-bottom: 1rem;
-    }
-
-    p.tagline {
-      font-size: 1.25rem;
-      color: #555;
-      margin-top: 0;
-    }
-
-    .search-bar {
-      margin: 2rem auto;
-      max-width: 500px;
-      display: flex;
-      padding: 0 1rem;
-    }
-
-    input[type="text"] {
-      flex: 1;
-      padding: 0.75rem;
-      border: 1px solid #ccc;
-      border-radius: 8px 0 0 8px;
-      font-size: 1rem;
-    }
-
-    button {
-      padding: 0.75rem 1rem;
-      border: none;
-      background-color: #ea4335;
-      color: white;
-      font-size: 1rem;
-      border-radius: 0 8px 8px 0;
-      cursor: pointer;
-    }
-
-    section {
-      padding: 3rem 1rem;
-      max-width: 800px;
-      margin: auto;
-    }
-
-    a.button-link {
-      display: inline-block;
-      margin-top: 1rem;
-      padding: 0.75rem 1.5rem;
-      background-color: #333;
-      color: #fff;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    footer {
-      background: #f5f5f5;
-      text-align: center;
-      padding: 2rem 1rem;
-      font-size: 0.9rem;
-      color: #555;
-    }
-
-    @media (max-width: 600px) {
-      .search-bar {
-        flex-direction: column;
-      }
-
-      input[type="text"],
-      button {
-        border-radius: 8px;
-        margin: 0.25rem 0;
-      }
-
-      button {
-        width: 100%;
-      }
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GiveWhere – Donate & Recycle Made Simple</title>
+  
+  <!-- Google Maps Extended Component Library -->
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/@googlemaps/extended-component-library/0.6.11/index.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f6f6f6;
+    }
+    header {
+      background: #1a1a1a;
+      color: white;
+      padding: 1rem 2rem;
+      text-align: center;
+    }
+    .container {
+      padding: 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      margin-bottom: 0.5rem;
+    }
+    input, textarea, button {
+      padding: 0.75rem;
+      margin-top: 0.5rem;
+      width: 100%;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    button {
+      background: #1a1a1a;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #333;
+    }
+    #aiResult {
+      margin-top: 1rem;
+      background: #eef4ea;
+      padding: 1rem;
+      border-radius: 8px;
+    }
+    #map {
+      height: 400px;
+      margin-top: 2rem;
+      border-radius: 12px;
+    }
+  </style>
 </head>
 <body>
+<header style="display:flex; align-items:center; justify-content:space-between; padding:1rem 2rem; background:#1a1a1a;">
+  <img src="logo.png" alt="GiveWhere logo" style="height:60px; border-radius:8px;">
+  <div style="text-align:right; color:white;">
+    <h1 style="margin:0; font-size:1.8rem;">GiveWhere</h1>
+    <p style="margin:0;">Donating and recycling made simple.</p>
+  </div>
+</header>
+  <header>
+    <h1>GiveWhere</h1>
+    <p>Donating and recycling made simple.</p>
+  </header>
 
-  <header>
-    <img src="logo.png" alt="GiveWhere Logo" class="logo" />
-    <p class="tagline">Donating and recycling made simple.</p>
+  <div class="container">
+    <h2>What do you want to give away?</h2>
+    <input type="text" id="itemInput" placeholder="e.g., laptop, books, clothes" />
+    <button onclick="runSearch()">Find Options</button>
 
-    <div class="search-bar">
-      <input type="text" placeholder="What do you want to give a second life?" />
-      <button>Search</button>
-    </div>
-  </header>
+    <div id="aiResult"></div>
 
-  <section>
-    <h2>What is GiveWhere?</h2>
-    <p>
-      GiveWhere is your guide to clutter-free living with a conscience. Just type what you're letting go of, and we’ll show you how to donate or recycle it responsibly—nearby and online.
-    </p>
+    <h3 style="margin-top:2rem;">Search Near You</h3>
+    <div class="place-picker-container">
+      <gmpx-api-loader key="AIzaSyBI081GRb0WYZN1LQi789TzuNH5pxguWyU" solution-channel="GMP_GE_mapsandplacesautocomplete_v2"></gmpx-api-loader>
+      <gmp-map center="40.749933,-73.98633" zoom="13" map-id="DEMO_MAP_ID">
+        <div slot="control-block-start-inline-start" class="place-picker-container">
+          <gmpx-place-picker placeholder="Type a location or use your own"></gmpx-place-picker>
+        </div>
+        <gmp-advanced-marker></gmp-advanced-marker>
+      </gmp-map>
+    </div>
+  </div>
 
-    <a class="button-link" href="https://givewhere-search.work.app" target="_blank">
-      Launch the App
-    </a>
-  </section>
-<section>
-  <section>
-  <h2>Contact Us</h2>
-  <p>Have a suggestion or want to list a center? Let us know.</p>
+  <script>
+    async function runSearch() {
+      const input = document.getElementById("itemInput").value;
+      const resultDiv = document.getElementById("aiResult");
 
-  <form id="contactForm">
-    <input type="text" name="name" placeholder="Your name" required>
-    <input type="email" name="email" placeholder="Your email" required>
-    <textarea name="message" placeholder="Your message" rows="5" required></textarea>
-    <button type="submit">Send Message</button>
-  </form>
+      if (!input) {
+        resultDiv.innerHTML = "❗ Please enter an item to search.";
+        return;
+      }
 
-  <p id="contactResponse" style="display:none; color:green; font-weight:bold; margin-top:1rem;">
-    Thank you! We'll be in touch soon.
-  </p>
-</section>
+      resultDiv.innerHTML = "🤖 Thinking of ideas for you...";
 
-</section>
+      // SAFETY WARNING:
+      // This is a DEMO simulation — do not expose your real ChatGPT API key in production.
+      // Replace this fetch call with your own backend endpoint or use Netlify Functions.
 
-<section>
-  <h2>Join Our Email List</h2>
-  <p>Get updates when new cities, features, or resources are added to GiveWhere.</p>
+      const suggestion = await fakeChatGPT(input);
+      resultDiv.innerHTML = `<strong>Suggestions:</strong><br>${suggestion}`;
+    }
 
-  <form action="https://formsubmit.co/givewhereinfo@gmail.com" method="POST">
-    <input type="hidden" name="_captcha" value="false">
-    <input type="hidden" name="_subject" value="New Email Sign-Up">
-    <input type="email" name="email" placeholder="Your email address" required style="width:100%;padding:10px;margin:10px 0;border:1px solid #ccc;border-radius:8px;">
-    <button type="submit" style="padding:10px 20px;background:#000;color:#fff;border:none;border-radius:8px;cursor:pointer;">Subscribe</button>
-  </form>
-</section>
-  <footer>
-    &copy; 2025 GiveWhere • Built for good • <a href="mailto:hello@givewhere.org">Contact Us</a>
-  </footer>
-<script>
-  document.getElementById("contactForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    const form = e.target;
-    const data = {
-      name: form.name.value,
-      email: form.email.value,
-      message: form.message.value,
-      source: "Contact Form"
-    };
-
-    fetch("YOUR_GOOGLE_SCRIPT_WEB_APP_URL", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-      .then(res => res.json())
-      .then(response => {
-        document.getElementById("contactResponse").style.display = "block";
-        form.reset();
-      })
-      .catch(err => alert("Something went wrong. Please try again later."));
-  });
-</script>
-
+    // Simulated ChatGPT Response (replace with backend call)
+    async function fakeChatGPT(query) {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve(`You can donate "${query}" to Goodwill, The Salvation Army, or a local shelter. For recycling, check Earth911.com or Best Buy’s electronics program.`);
+        }, 1000);
+      });
+    }
+  </script>
 </body>
 </html>
